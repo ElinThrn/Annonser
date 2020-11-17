@@ -22,28 +22,28 @@ namespace Annonser
 
         private void Ad_Load(object sender, EventArgs e)
         {
-            using (AnnonserEntities1 db = new AnnonserEntities1())
-            {
-                List<Category> category = db.Categories.ToList();
+            //using (AnnonserEntities1 db = new AnnonserEntities1())
+            //{
+            //    List<Category> category = db.Categories.ToList();
 
-                ComboBoxItem item = new ComboBoxItem();
-                item.Value = 0;
-                item.Text = "Alla kategorier";
+            //    ComboBoxItem item = new ComboBoxItem();
+            //    item.Value = 0;
+            //    item.Text = "Alla kategorier";
 
-                cboCategori.Items.Add(item);
+            //    cboCategori.Items.Add(item);
 
-                foreach (Category cat in category)
-                {
-                    ComboBoxItem listItem = new ComboBoxItem();
-                    listItem.Value = cat.CategoryID;
-                    listBox1.ValueMember = "AdID";
-                    listItem.Text = cat.Categoryname;
+            //    foreach (Category cat in category)
+            //    {
+            //        ComboBoxItem listItem = new ComboBoxItem();
+            //        listItem.Value = cat.CategoryID;
+            //        listBox1.ValueMember = "AdID";
+            //        listItem.Text = cat.Categoryname;
 
-                    cboCategori.Items.Add(listItem);
-                }
-            }
+            //        cboCategori.Items.Add(listItem);
+            //    }
+            //}
 
-            cboCategori.SelectedIndex = 0;
+            //cboCategori.SelectedIndex = 0;
         }
 
         private void cmdSearch_Click(object sender, EventArgs e)
@@ -52,22 +52,22 @@ namespace Annonser
             int categoryID = int.Parse((cboCategori.SelectedItem as ComboBoxItem).Value.ToString());
             listBox1.DataSource = null;
 
-            using (AnnonserEntities1 db = new AnnonserEntities1())
-            {
-                List<Advert> adverts;
+            //using (AnnonserEntities1 db = new AnnonserEntities1())
+            //{
+            //    List<Advert> adverts;
 
-                if (categoryID == 0)
-                {
-                    adverts = db.Adverts.Where(a => a.Title.Contains(condition)).ToList();
+            //    if (categoryID == 0)
+            //    {
+            //        adverts = db.Adverts.Where(a => a.Title.Contains(condition)).ToList();
 
-                }
-                else
-                {
-                    adverts = db.Adverts.Where(a => a.Title.Contains(condition) && a.CategoryID == categoryID).ToList();
-                }
-                listBox1.DisplayMember = "Title";
-                listBox1.DataSource = adverts;
-            }
+            //    }
+            //    else
+            //    {
+            //        adverts = db.Adverts.Where(a => a.Title.Contains(condition) && a.CategoryID == categoryID).ToList();
+            //    }
+            //    listBox1.DisplayMember = "Title";
+            //    listBox1.DataSource = adverts;
+            //}
         }
 
         private void cmdLogin_Click(object sender, EventArgs e)
@@ -110,21 +110,21 @@ namespace Annonser
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            using (AnnonserEntities1 db = new AnnonserEntities1())
-            {
+            //using (AnnonserEntities1 db = new AnnonserEntities1())
+            //{
 
-                int advertID = int.Parse(listBox1.SelectedValue.ToString());
+            //    int advertID = int.Parse(listBox1.SelectedValue.ToString());
 
-                Advert advert = db.Adverts.Where(s => s.AdID == advertID).SingleOrDefault();
+            //    Advert advert = db.Adverts.Where(s => s.AdID == advertID).SingleOrDefault();
               
 
-                txtInfoDescription.Text = advert.Description;
-                txtInfoTitel.Text = advert.Title;
-                txtPriceInfo.Text = (advert.Price).ToString();
-                txtLocationInfo.Text = advert.Location;
+            //    txtInfoDescription.Text = advert.Description;
+            //    txtInfoTitel.Text = advert.Title;
+            //    txtPriceInfo.Text = (advert.Price).ToString();
+            //    txtLocationInfo.Text = advert.Location;
                 
 
-            }
+            //}
         }
     }
 }

@@ -14,11 +14,9 @@ namespace Annonser
 {
     public partial class frmUserDetails : Form
     {
-        USer userIn = new USer();
-        public frmUserDetails(USer user)
+        public frmUserDetails()
         {
             InitializeComponent();
-            userIn = user;
         }
 
         private void frmUserDetails_Load(object sender, EventArgs e)

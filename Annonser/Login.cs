@@ -14,29 +14,24 @@ namespace Annonser
 {
     public partial class Login : Form
     {
+        Database db;
+
         public Login()
         {
             InitializeComponent();
+            db = new Database();
 
         }
 
         private void cmdMemberLogin_Click(object sender, EventArgs e)
         {
-
-            USer uSer = UserRepo.LogIn(txtUsername.Text, txtPassword.Text);
-            USer user = new USer();
-            frmUserDetails userdeta = new frmUserDetails(user);
-            userdeta.Show();
-
+            db.Login(txtUsername.Text, txtPassword.Text);
         }
 
         private void cmdCreateAccount_Click(object sender, EventArgs e)
         {
             CreateMember createmember = new CreateMember();
             createmember.Show();
-            
-            
-
         }
     }
 }
