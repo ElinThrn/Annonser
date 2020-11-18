@@ -16,19 +16,24 @@ namespace Annonser
     public partial class CreateMember : Form
     {
 
-        private int UserID;
-        Database db;
+        UserRepo ur;
        
 
         public CreateMember()
         {
             InitializeComponent();
-            db = new Database();
+            ur = new UserRepo();
         }
 
         public void cmdReg_Click(object sender, EventArgs e)
         {
-            db.CreateMember(txtFirstName.Text, txtLastName.Text, txtEmail.Text, txtUserName.Text, txtPassWord.Text);
+            ur.CreateMember(txtFirstName.Text, txtLastName.Text, txtEmail.Text, txtUserName.Text, txtPassWord.Text);
+            
+        }
+
+        private void CreateMember_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

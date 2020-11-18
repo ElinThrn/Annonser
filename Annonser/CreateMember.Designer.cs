@@ -149,6 +149,7 @@
             this.Controls.Add(this.txtFirstName);
             this.Name = "CreateMember";
             this.Text = "CreateMember";
+            this.Load += new System.EventHandler(this.CreateMember_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -83,8 +83,6 @@
       <DependentUpon>Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Classes\AdvertRepo.cs" />
-    <Compile Include="Classes\CategoryRepo.cs" />
-    <Compile Include="Classes\Database.cs" />
     <Compile Include="Classes\UserRepo.cs" />
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="CreateMember.cs">
@@ -188,17 +186,10 @@
       <DependentUpon>Database.edmx</DependentUpon>
       <LastGenOutput>Database.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="DataBase.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Database.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Database.edmx</DependentUpon>
       <LastGenOutput>Database.cs</LastGenOutput>
-    </Content>
-    <Content Include="DataBase_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>DataBase.mdf</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>

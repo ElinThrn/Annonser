@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="AnnonserModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="AnnonserModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Advert">
           <Key>
             <PropertyRef Name="AdID" />
@@ -14,8 +14,9 @@
           <Property Name="Title" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="Location" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="UserID" Type="nchar" MaxLength="10" />
           <Property Name="CategoryID" Type="int" />
+          <Property Name="date_time" Type="datetime" />
+          <Property Name="UserID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -86,8 +87,7 @@
             <End Role="USer" EntitySet="USer" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AnnonserModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -100,10 +100,11 @@
           <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="UserID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="CategoryID" Type="Int32" />
           <NavigationProperty Name="Categories" Relationship="Self.FK_Category_Advert" FromRole="Advert" ToRole="Category" />
           <NavigationProperty Name="USers" Relationship="Self.FK_USer_Advert" FromRole="Advert" ToRole="USer" />
+          <Property Name="date_time" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -185,6 +186,7 @@
           <EntitySetMapping Name="Adverts">
             <EntityTypeMapping TypeName="AnnonserModel.Advert">
               <MappingFragment StoreEntitySet="Advert">
+                <ScalarProperty Name="date_time" ColumnName="date_time" />
                 <ScalarProperty Name="AdID" ColumnName="AdID" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Title" ColumnName="Title" />

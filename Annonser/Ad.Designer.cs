@@ -222,6 +222,7 @@
             this.Name = "Ad";
             this.Text = "Annonser";
             this.Load += new System.EventHandler(this.Ad_Load);
+            this.Shown += new System.EventHandler(this.Ad_Show);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);

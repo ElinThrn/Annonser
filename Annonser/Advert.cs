@@ -26,8 +26,9 @@ namespace Annonser
         public string Title { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
-        public string UserID { get; set; }
+        public int UserID { get; set; }
         public Nullable<int> CategoryID { get; set; }
+        public Nullable<System.DateTime> date_time { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Category> Categories { get; set; }

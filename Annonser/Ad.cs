@@ -8,82 +8,44 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using Annonser.Classes;
 
 namespace Annonser
 {
     public partial class Ad : Form
     {
         public bool isLoggedIn = false;
+
+        Database db;
         public Ad()
         {
             InitializeComponent();
+            db = new Database();
+
 
         }
 
         private void Ad_Load(object sender, EventArgs e)
         {
-            //using (AnnonserEntities1 db = new AnnonserEntities1())
-            //{
-            //    List<Category> category = db.Categories.ToList();
-
-            //    ComboBoxItem item = new ComboBoxItem();
-            //    item.Value = 0;
-            //    item.Text = "Alla kategorier";
-
-            //    cboCategori.Items.Add(item);
-
-            //    foreach (Category cat in category)
-            //    {
-            //        ComboBoxItem listItem = new ComboBoxItem();
-            //        listItem.Value = cat.CategoryID;
-            //        listBox1.ValueMember = "AdID";
-            //        listItem.Text = cat.Categoryname;
-
-            //        cboCategori.Items.Add(listItem);
-            //    }
-            //}
-
-            //cboCategori.SelectedIndex = 0;
+            db.AdLoad(cboCategori, listBox1);
         }
 
         private void cmdSearch_Click(object sender, EventArgs e)
         {
-            string condition = txtSearch.Text;
-            int categoryID = int.Parse((cboCategori.SelectedItem as ComboBoxItem).Value.ToString());
-            listBox1.DataSource = null;
+            db.Search(txtSearch.Text, cboCategori, listBox1);
 
-            //using (AnnonserEntities1 db = new AnnonserEntities1())
-            //{
-            //    List<Advert> adverts;
-
-            //    if (categoryID == 0)
-            //    {
-            //        adverts = db.Adverts.Where(a => a.Title.Contains(condition)).ToList();
-
-            //    }
-            //    else
-            //    {
-            //        adverts = db.Adverts.Where(a => a.Title.Contains(condition) && a.CategoryID == categoryID).ToList();
-            //    }
-            //    listBox1.DisplayMember = "Title";
-            //    listBox1.DataSource = adverts;
-            //}
         }
 
         private void cmdLogin_Click(object sender, EventArgs e)
         {
             this.Hide();
-            using (Login login = new Login())
+            using(Login loginWindow = new Login())
             {
-                login.ShowDialog();
-               
+                loginWindow.ShowDialog();
             }
-            if (isLoggedIn == true)
-            {
-                cmdEditAd.Visible = true;
-                cmdMyAd.Visible = true;
-            }
-            this.Show();
+            cmdMyAd.Visible = true;
+            cmdEditAd.Visible = true;
+
 
 
         }
@@ -110,25 +72,25 @@ namespace Annonser
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //using (AnnonserEntities1 db = new AnnonserEntities1())
-            //{
+            db.ListBoxSelect(listBox1, txtInfoDescription, txtInfoTitel, txtPriceInfo, txtLocationInfo);
+        }
 
-            //    int advertID = int.Parse(listBox1.SelectedValue.ToString());
-
-            //    Advert advert = db.Adverts.Where(s => s.AdID == advertID).SingleOrDefault();
-              
-
-            //    txtInfoDescription.Text = advert.Description;
-            //    txtInfoTitel.Text = advert.Title;
-            //    txtPriceInfo.Text = (advert.Price).ToString();
-            //    txtLocationInfo.Text = advert.Location;
-                
-
-            //}
+        private void Ad_Show(object sender, EventArgs e)
+        {
+            if (db.login == true)
+            {
+                cmdMyAd.Visible = true;
+                cmdEditAd.Visible = true;
+            }
+            else
+            {
+                cmdMyAd.Visible = false;
+                cmdEditAd.Visible = false;
+            }
         }
     }
 }
 
 
- 
+
 
