@@ -78,16 +78,6 @@ namespace Annonser
             this.UserID = userId;
         }
 
-        private void cmdEditAd_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            using (Form editForm = new EditAd())
-            {
-                editForm.ShowDialog();
-            }
-            this.Show();
-        }
-
         private void cmdMyAd_Click(object sender, EventArgs e)
         {
             frmUserDetails ud = new frmUserDetails();

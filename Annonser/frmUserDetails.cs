@@ -109,6 +109,7 @@ namespace Annonser
                 advert.Price = Convert.ToInt32(txtPrice.Text);
                 advert.Location = txtLocation.Text;
                 advert.AdvertDate = DateTime.Now;
+                advert.CategoryID = cboCategory.SelectedIndex;
                 advert.UserID = this.UserID;
 
                 db.Adverts.Add(advert);
@@ -131,11 +132,11 @@ namespace Annonser
                 advert.Price = Convert.ToInt32(txtPrice.Text);
                 advert.Location = txtLocation.Text;
                 advert.AdvertDate = DateTime.Now;
+                advert.CategoryID = cboCategory.SelectedIndex;
                 db.SaveChanges();
                 MessageBox.Show("Annons uppdaterad");
             }
         }
-
     }
 
 }

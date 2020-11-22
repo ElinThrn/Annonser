@@ -72,8 +72,6 @@ namespace Annonser.Classes
                 {
                     int advertID = int.Parse(lb.SelectedValue.ToString());
 
-                    //List<GetUserName_Result> result = db.GetUserName(firstname).ToList();
-
                     Advert advert = db.Adverts.Where(s => s.AdID == advertID).SingleOrDefault();
 
                     description.Text = advert.Description;
