@@ -34,7 +34,6 @@
             this.cmdSearch = new System.Windows.Forms.Button();
             this.cmdLogin = new System.Windows.Forms.Button();
             this.cmdMyAd = new System.Windows.Forms.Button();
-            this.cmdEditAd = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtSeller = new System.Windows.Forms.TextBox();
@@ -44,6 +43,9 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtLocationInfo = new System.Windows.Forms.TextBox();
             this.txtPriceInfo = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cmdSortByPrice = new System.Windows.Forms.Button();
+            this.cmdSortByDate = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -64,16 +66,15 @@
             // 
             this.cboCategori.Font = new System.Drawing.Font("Arial", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboCategori.FormattingEnabled = true;
-            this.cboCategori.Location = new System.Drawing.Point(12, 59);
+            this.cboCategori.Location = new System.Drawing.Point(12, 43);
             this.cboCategori.Name = "cboCategori";
             this.cboCategori.Size = new System.Drawing.Size(183, 24);
             this.cboCategori.TabIndex = 1;
-            this.cboCategori.SelectedIndexChanged += new System.EventHandler(this.cboCategori_SelectedIndexChanged);
             // 
             // txtSearch
             // 
             this.txtSearch.Font = new System.Drawing.Font("Arial", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSearch.Location = new System.Drawing.Point(201, 61);
+            this.txtSearch.Location = new System.Drawing.Point(201, 45);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(220, 22);
             this.txtSearch.TabIndex = 2;
@@ -81,7 +82,7 @@
             // cmdSearch
             // 
             this.cmdSearch.Font = new System.Drawing.Font("Arial", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdSearch.Location = new System.Drawing.Point(427, 59);
+            this.cmdSearch.Location = new System.Drawing.Point(427, 45);
             this.cmdSearch.Name = "cmdSearch";
             this.cmdSearch.Size = new System.Drawing.Size(84, 22);
             this.cmdSearch.TabIndex = 3;
@@ -111,18 +112,6 @@
             this.cmdMyAd.UseVisualStyleBackColor = true;
             this.cmdMyAd.Visible = false;
             this.cmdMyAd.Click += new System.EventHandler(this.cmdMyAd_Click);
-            // 
-            // cmdEditAd
-            // 
-            this.cmdEditAd.Font = new System.Drawing.Font("Arial", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdEditAd.Location = new System.Drawing.Point(250, 371);
-            this.cmdEditAd.Name = "cmdEditAd";
-            this.cmdEditAd.Size = new System.Drawing.Size(197, 31);
-            this.cmdEditAd.TabIndex = 8;
-            this.cmdEditAd.Text = "Lägg till/Ändra/Ta bort annons";
-            this.cmdEditAd.UseVisualStyleBackColor = true;
-            this.cmdEditAd.Visible = false;
-            this.cmdEditAd.Click += new System.EventHandler(this.cmdEditAd_Click);
             // 
             // groupBox3
             // 
@@ -204,15 +193,46 @@
             this.txtPriceInfo.TabIndex = 5;
             this.txtPriceInfo.Text = "Pris";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(244, 93);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(87, 17);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Sortera på...";
+            // 
+            // cmdSortByPrice
+            // 
+            this.cmdSortByPrice.Location = new System.Drawing.Point(346, 90);
+            this.cmdSortByPrice.Name = "cmdSortByPrice";
+            this.cmdSortByPrice.Size = new System.Drawing.Size(75, 23);
+            this.cmdSortByPrice.TabIndex = 15;
+            this.cmdSortByPrice.Text = "Pris";
+            this.cmdSortByPrice.UseVisualStyleBackColor = true;
+            this.cmdSortByPrice.Click += new System.EventHandler(this.cmdSortByPrice_Click);
+            // 
+            // cmdSortByDate
+            // 
+            this.cmdSortByDate.Location = new System.Drawing.Point(427, 90);
+            this.cmdSortByDate.Name = "cmdSortByDate";
+            this.cmdSortByDate.Size = new System.Drawing.Size(75, 23);
+            this.cmdSortByDate.TabIndex = 16;
+            this.cmdSortByDate.Text = "Datum";
+            this.cmdSortByDate.UseVisualStyleBackColor = true;
+            this.cmdSortByDate.Click += new System.EventHandler(this.cmdSortByDate_Click);
+            // 
             // Ad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1048, 464);
+            this.Controls.Add(this.cmdSortByDate);
+            this.Controls.Add(this.cmdSortByPrice);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.cmdEditAd);
             this.Controls.Add(this.cmdMyAd);
             this.Controls.Add(this.cmdLogin);
             this.Controls.Add(this.cmdSearch);
@@ -222,7 +242,6 @@
             this.Name = "Ad";
             this.Text = "Annonser";
             this.Load += new System.EventHandler(this.Ad_Load);
-            this.Shown += new System.EventHandler(this.Ad_Show);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -242,7 +261,6 @@
         private System.Windows.Forms.Button cmdSearch;
         private System.Windows.Forms.Button cmdLogin;
         private System.Windows.Forms.Button cmdMyAd;
-        private System.Windows.Forms.Button cmdEditAd;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtSeller;
@@ -252,6 +270,9 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox txtLocationInfo;
         private System.Windows.Forms.TextBox txtPriceInfo;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button cmdSortByPrice;
+        private System.Windows.Forms.Button cmdSortByDate;
     }
 }
 

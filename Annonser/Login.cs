@@ -19,21 +19,18 @@ namespace Annonser
         {
             InitializeComponent();
             ur = new UserRepo();
-
-
         }
 
         private void cmdMemberLogin_Click(object sender, EventArgs e)
         {
-           if(ur.Login(txtUsername.Text, txtPassword.Text))
+            int UserID = ur.Login(txtUsername.Text, txtPassword.Text);
+            if (UserID > 0)
             {
                 Ad ad = new Ad();
                 ad.Show();
-
+                ad.Ad_Show();
+                ad.SetUser(UserID);
                 this.Close();
-                
-
-
             }
 
         }

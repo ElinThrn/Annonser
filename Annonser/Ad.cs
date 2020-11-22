@@ -14,26 +14,52 @@ namespace Annonser
 {
     public partial class Ad : Form
     {
+        AdvertRepo ar = new AdvertRepo();
         public bool isLoggedIn = false;
+        public int UserID = 0;
 
-        Database db;
         public Ad()
         {
             InitializeComponent();
-            db = new Database();
-
-
         }
 
         private void Ad_Load(object sender, EventArgs e)
         {
-            db.AdLoad(cboCategori, listBox1);
+            //db.AdLoad(cboCategori, listBox1);
+            using (AnnonserEntities1 db = new AnnonserEntities1())
+            {
+                List<Category> category = db.Categories.ToList();
+
+                ComboBoxItem item = new ComboBoxItem();
+                item.Value = 0;
+                item.Text = "Alla kategorier";
+
+                cboCategori.Items.Add(item);
+
+                foreach (Category cat in category)
+                {
+                    ComboBoxItem listItem = new ComboBoxItem();
+
+                    listItem.Value = cat.CategoryID;
+                    listBox1.ValueMember = "AdID";
+                    listItem.Text = cat.Categoryname;
+
+                    cboCategori.Items.Add(listItem);
+                }
+                cboCategori.SelectedIndex = 0;
+            }
         }
 
         private void cmdSearch_Click(object sender, EventArgs e)
         {
-            db.Search(txtSearch.Text, cboCategori, listBox1);
 
+            listBox1.DataSource = null;
+            if (txtSearch.Text == "")
+            {
+                listBox1.DataSource = AdvertRepo.GetData();
+            }
+            AdvertRepo search = new AdvertRepo();
+            search.Search(txtSearch.Text, cboCategori, listBox1);
         }
 
         private void cmdLogin_Click(object sender, EventArgs e)
@@ -44,10 +70,12 @@ namespace Annonser
                 loginWindow.ShowDialog();
             }
             cmdMyAd.Visible = true;
-            cmdEditAd.Visible = true;
+            
+        }
 
-
-
+        public void SetUser(int userId)
+        {
+            this.UserID = userId;
         }
 
         private void cmdEditAd_Click(object sender, EventArgs e)
@@ -62,30 +90,54 @@ namespace Annonser
 
         private void cmdMyAd_Click(object sender, EventArgs e)
         {
-
+            frmUserDetails ud = new frmUserDetails();
+            ud.UserID = this.UserID;
+            ud.Show();
+            
         }
-
-        private void cboCategori_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            db.ListBoxSelect(listBox1, txtInfoDescription, txtInfoTitel, txtPriceInfo, txtLocationInfo);
+            
+            ar.ListBoxSelect(listBox1, txtInfoDescription, txtInfoTitel, txtPriceInfo, txtLocationInfo, txtSeller);
         }
 
-        private void Ad_Show(object sender, EventArgs e)
+        public void Ad_Show()
         {
-            if (db.login == true)
-            {
                 cmdMyAd.Visible = true;
-                cmdEditAd.Visible = true;
-            }
-            else
+        }
+
+        private void cmdSortByDate_Click(object sender, EventArgs e)
+        {
+            USer user = new USer();
+            UserID = user.UserID;
+            listBox1.DataSource = null;
+            using (AnnonserEntities1 db = new AnnonserEntities1())
             {
-                cmdMyAd.Visible = false;
-                cmdEditAd.Visible = false;
+                List<Advert> adverts;
+
+                //adverts = (List<Advert>)db.Adverts.GroupBy(x => x.AdvertDate).ToList();
+                adverts = db.Adverts.Where(a => a.Title.Contains(txtSearch.Text)).OrderByDescending(a => a.AdvertDate).ToList();
+
+
+
+                listBox1.DisplayMember = "Title";
+                listBox1.DataSource = adverts;
+            }
+        }
+
+        private void cmdSortByPrice_Click(object sender, EventArgs e)
+        {
+            USer user = new USer();
+            UserID = user.UserID;
+            listBox1.DataSource = null;
+            using (AnnonserEntities1 db = new AnnonserEntities1())
+            {
+                List<Advert> adverts;
+
+                adverts = db.Adverts.Where(a => a.Title.Contains(txtSearch.Text)).OrderByDescending(a => a.Price).ToList();
+
+                listBox1.DisplayMember = "Title";
+                listBox1.DataSource = adverts;
             }
         }
     }

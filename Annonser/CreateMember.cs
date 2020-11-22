@@ -24,16 +24,10 @@ namespace Annonser
             InitializeComponent();
             ur = new UserRepo();
         }
-
         public void cmdReg_Click(object sender, EventArgs e)
         {
-            ur.CreateMember(txtFirstName.Text, txtLastName.Text, txtEmail.Text, txtUserName.Text, txtPassWord.Text);
+            ur.CreateMember(new User(txtFirstName.Text,txtLastName.Text,txtEmail.Text,txtUserName.Text,txtPassWord.Text));
             
-        }
-
-        private void CreateMember_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

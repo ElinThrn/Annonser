@@ -11,36 +11,32 @@ namespace Annonser.Classes
 {
     public  class UserRepo
     {
+        public static string conn = "Data Source=localhost;Initial Catalog=Annonser;Integrated Security=SSPI;";
+
+        public int LoggedUserID { get; set; }
         public bool login { get; set; }
 
         int UserID;
 
-        public void CreateMember(string firstname, string lastname, string email, string username, string password)
+        public void CreateMember(User ur)
         {
-
             SqlConnection conn = new SqlConnection();
-
-
 
             conn.ConnectionString = "Data Source = localhost; Initial Catalog = Annonser; Integrated Security = SSPI;";
             conn.Open();
 
-            if (firstname != "" || email != "")
+            if (ur.FirstName != "" || ur.Email != "")
             {
-
-
                 string sql = "insert into [User](Firstname,Lastname,Email,Username,Password) values (@Firstname, @Lastname, @Email, @Username, @Password)";
                 sql += "Select cast(@@identity as int)";
 
-
-
                 SqlCommand cmd = new SqlCommand(sql, conn);
 
-                cmd.Parameters.AddWithValue("@Firstname", firstname);
-                cmd.Parameters.AddWithValue("@Lastname", lastname);
-                cmd.Parameters.AddWithValue("@Email", email);
-                cmd.Parameters.AddWithValue("@Username", username);
-                cmd.Parameters.AddWithValue("@Password", password);
+                cmd.Parameters.AddWithValue("@Firstname", ur.FirstName);
+                cmd.Parameters.AddWithValue("@Lastname", ur.LastName);
+                cmd.Parameters.AddWithValue("@Email", ur.Email);
+                cmd.Parameters.AddWithValue("@Username", ur.Username);
+                cmd.Parameters.AddWithValue("@Password", ur.Password);
 
                 int newID = (int)cmd.ExecuteScalar();
                 UserID = newID;
@@ -54,33 +50,59 @@ namespace Annonser.Classes
             }
         }
 
-        public bool Login(string username, string password)
+        public int Login(string username, string password)
         {
-            using (SqlConnection conn = new SqlConnection())
+            using (AnnonserEntities1 db = new AnnonserEntities1())
             {
-                conn.ConnectionString = "Data Source = localhost; Initial Catalog = Annonser; Integrated Security = SSPI;";
-                conn.Open();
+                USer user = db.USers.Where(x => x.Username == username && x.Password == password).SingleOrDefault();
 
-                string query = "Select * from [User] Where username = '" + username + "' and password = '" + password + "'";
-                SqlDataAdapter sda = new SqlDataAdapter(query, conn);
-                DataTable dtbl = new DataTable();
-
-                sda.Fill(dtbl);
-
-                if (dtbl.Rows.Count == 1)
+                if (user != null)
                 {
-                    login = true;
+                    return user.UserID;
+
                 }
                 else
                 {
                     MessageBox.Show("Inloggning misslyckades");
-                    login = false;
+                    return 0;
                 }
             }
-            return login;
 
         }
+        public int GetUSerID(string username, string password)
+        {
+            using (AnnonserEntities1 db = new AnnonserEntities1())
+            {
+                USer user = db.USers.Where(x => x.Username == username && x.Password == password).SingleOrDefault();
 
+                if (user != null)
+                {
+                    return user.UserID;
+                }
+                else
+                {
+                    
+                    MessageBox.Show("User not found.");
+                    return 0;
+                }
+            }
+        }
+        public string GetUsername(int userId)
+        {
+            using (AnnonserEntities1 db = new AnnonserEntities1())
+            {
+                USer user = db.USers.Where(x => x.UserID == userId).SingleOrDefault();
+
+                if (user != null)
+                {
+                    return $"{user.Firstname} {user.Lastname}";
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
     }
 }
 

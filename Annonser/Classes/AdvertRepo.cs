@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
+using Annonser.Classes;
+using System.Windows.Forms;
+using System.Data;
 
 namespace Annonser.Classes
 {
-   public class AdvertRepo
+    public class AdvertRepo
     {
-
-
-        public void Search(string textSearch, ComboBox category, ListBox listBox)
+        UserRepo ur = new UserRepo();
+        int UserID;
+        public static string connectionString = "Data Source=localhost;Initial Catalog=Annonser;Integrated Security=SSPI;";
+        public void Search(string textSearch, ComboBox cb, ListBox lb)
         {
+
             USer user = new USer();
             UserID = user.UserID;
             string condition = textSearch;
-            int categoryID = int.Parse((category.SelectedItem as ComboBoxItem).Value.ToString());
-            listBox.DataSource = null;
-
+            int categoryID = int.Parse((cb.SelectedItem as ComboBoxItem).Value.ToString());
+            lb.DataSource = null;
             using (AnnonserEntities1 db = new AnnonserEntities1())
             {
                 List<Advert> adverts;
@@ -29,56 +34,76 @@ namespace Annonser.Classes
                 }
                 else
                 {
+                   
                     adverts = db.Adverts.Where(a => a.Title.Contains(condition) && a.CategoryID == categoryID).ToList();
                 }
-                listBox.DisplayMember = "Title";
-                listBox.DataSource = adverts;
+
+                lb.DisplayMember = "Title";
+                lb.DataSource = adverts;
             }
         }
-
-        public void AdLoad(ComboBox categori, ListBox listBox)
+        public static DataTable GetData()
         {
-            using (AnnonserEntities1 db = new AnnonserEntities1())
+            try
             {
-                List<Category> category = db.Categories.ToList();
-
-                ComboBoxItem item = new ComboBoxItem();
-                item.Value = 0;
-                item.Text = "Alla kategorier";
-
-                categori.Items.Add(item);
-
-                foreach (Category cat in category)
+                using (SqlConnection db = new SqlConnection(connectionString))
                 {
-                    ComboBoxItem listItem = new ComboBoxItem();
-                    listItem.Value = cat.CategoryID;
-                    listBox.ValueMember = "AdID";
-                    listItem.Text = cat.Categoryname;
+                    SqlCommand cmd = new SqlCommand("GetAd", db);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter Adpt = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    Adpt.Fill(dt);
+                    return dt;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public void ListBoxSelect(ListBox lb, TextBox description, TextBox titel, TextBox price, TextBox location, TextBox seller)
+        {
+            
+            if (lb.SelectedValue != null)
+            {
+                string firstname = seller.Text;
 
-                    categori.Items.Add(listItem);
+                using (AnnonserEntities1 db = new AnnonserEntities1())
+                {
+                    int advertID = int.Parse(lb.SelectedValue.ToString());
+
+                    //List<GetUserName_Result> result = db.GetUserName(firstname).ToList();
+
+                    Advert advert = db.Adverts.Where(s => s.AdID == advertID).SingleOrDefault();
+
+                    description.Text = advert.Description;
+                    titel.Text = advert.Title;
+                    price.Text = (advert.Price).ToString();
+                    location.Text = advert.Location;
+                    seller.Text = ur.GetUsername(advert.UserID);
+
+
+
                 }
             }
 
-            categori.SelectedIndex = 0;
         }
-
-        public void ListBoxSelect(ListBox listBox, TextBox description, TextBox titel, TextBox price, TextBox location)
+        public string GetCategoryName(int? categoryId)
         {
             using (AnnonserEntities1 db = new AnnonserEntities1())
             {
-
-                int advertID = int.Parse(listBox.SelectedValue.ToString());
-
-                Advert advert = db.Adverts.Where(s => s.AdID == advertID).SingleOrDefault();
-
-
-                description.Text = advert.Description;
-                titel.Text = advert.Title;
-                price.Text = (advert.Price).ToString();
-                location.Text = advert.Location;
-
-
+                Category category = db.Categories.Where(x => x.CategoryID == categoryId).SingleOrDefault();
+                if(category != null)
+                {
+                    return category.Categoryname;
+                }
+                else
+                {
+                    return "";
+                }
             }
         }
     }
 }
+
+
