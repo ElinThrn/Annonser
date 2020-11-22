@@ -8,20 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using Annonser.Classes;
 
 namespace Annonser
 {
     public partial class Ad : Form
     {
+        AdvertRepo ar = new AdvertRepo();
         public bool isLoggedIn = false;
+        public int UserID = 0;
+
         public Ad()
         {
             InitializeComponent();
-
         }
 
         private void Ad_Load(object sender, EventArgs e)
         {
+            //db.AdLoad(cboCategori, listBox1);
             using (AnnonserEntities1 db = new AnnonserEntities1())
             {
                 List<Category> category = db.Categories.ToList();
@@ -35,57 +39,43 @@ namespace Annonser
                 foreach (Category cat in category)
                 {
                     ComboBoxItem listItem = new ComboBoxItem();
+
                     listItem.Value = cat.CategoryID;
                     listBox1.ValueMember = "AdID";
                     listItem.Text = cat.Categoryname;
 
                     cboCategori.Items.Add(listItem);
                 }
+                cboCategori.SelectedIndex = 0;
             }
-
-            cboCategori.SelectedIndex = 0;
         }
 
         private void cmdSearch_Click(object sender, EventArgs e)
         {
-            string condition = txtSearch.Text;
-            int categoryID = int.Parse((cboCategori.SelectedItem as ComboBoxItem).Value.ToString());
+
             listBox1.DataSource = null;
-
-            using (AnnonserEntities1 db = new AnnonserEntities1())
+            if (txtSearch.Text == "")
             {
-                List<Advert> adverts;
-
-                if (categoryID == 0)
-                {
-                    adverts = db.Adverts.Where(a => a.Title.Contains(condition)).ToList();
-
-                }
-                else
-                {
-                    adverts = db.Adverts.Where(a => a.Title.Contains(condition) && a.CategoryID == categoryID).ToList();
-                }
-                listBox1.DisplayMember = "Title";
-                listBox1.DataSource = adverts;
+                listBox1.DataSource = AdvertRepo.GetData();
             }
+            AdvertRepo search = new AdvertRepo();
+            search.Search(txtSearch.Text, cboCategori, listBox1);
         }
 
         private void cmdLogin_Click(object sender, EventArgs e)
         {
             this.Hide();
-            using (Login login = new Login())
+            using(Login loginWindow = new Login())
             {
-                login.ShowDialog();
-               
+                loginWindow.ShowDialog();
             }
-            if (isLoggedIn == true)
-            {
-                cmdEditAd.Visible = true;
-                cmdMyAd.Visible = true;
-            }
-            this.Show();
+            cmdMyAd.Visible = true;
+            
+        }
 
-
+        public void SetUser(int userId)
+        {
+            this.UserID = userId;
         }
 
         private void cmdEditAd_Click(object sender, EventArgs e)
@@ -100,35 +90,59 @@ namespace Annonser
 
         private void cmdMyAd_Click(object sender, EventArgs e)
         {
-
+            frmUserDetails ud = new frmUserDetails();
+            ud.UserID = this.UserID;
+            ud.Show();
+            
         }
-
-        private void cboCategori_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
+            ar.ListBoxSelect(listBox1, txtInfoDescription, txtInfoTitel, txtPriceInfo, txtLocationInfo, txtSeller);
+        }
+
+        public void Ad_Show()
+        {
+                cmdMyAd.Visible = true;
+        }
+
+        private void cmdSortByDate_Click(object sender, EventArgs e)
+        {
+            USer user = new USer();
+            UserID = user.UserID;
+            listBox1.DataSource = null;
             using (AnnonserEntities1 db = new AnnonserEntities1())
             {
+                List<Advert> adverts;
 
-                int advertID = int.Parse(listBox1.SelectedValue.ToString());
+                //adverts = (List<Advert>)db.Adverts.GroupBy(x => x.AdvertDate).ToList();
+                adverts = db.Adverts.Where(a => a.Title.Contains(txtSearch.Text)).OrderByDescending(a => a.AdvertDate).ToList();
 
-                Advert advert = db.Adverts.Where(s => s.AdID == advertID).SingleOrDefault();
-              
 
-                txtInfoDescription.Text = advert.Description;
-                txtInfoTitel.Text = advert.Title;
-                txtPriceInfo.Text = (advert.Price).ToString();
-                txtLocationInfo.Text = advert.Location;
-                
 
+                listBox1.DisplayMember = "Title";
+                listBox1.DataSource = adverts;
+            }
+        }
+
+        private void cmdSortByPrice_Click(object sender, EventArgs e)
+        {
+            USer user = new USer();
+            UserID = user.UserID;
+            listBox1.DataSource = null;
+            using (AnnonserEntities1 db = new AnnonserEntities1())
+            {
+                List<Advert> adverts;
+
+                adverts = db.Adverts.Where(a => a.Title.Contains(txtSearch.Text)).OrderByDescending(a => a.Price).ToList();
+
+                listBox1.DisplayMember = "Title";
+                listBox1.DataSource = adverts;
             }
         }
     }
 }
 
 
- 
+
 

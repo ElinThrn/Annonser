@@ -9,38 +9,25 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Configuration;
+using Annonser.Classes;
 
 namespace Annonser
 {
     public partial class CreateMember : Form
     {
 
-        private int UserID;
+        UserRepo ur;
+       
+
         public CreateMember()
         {
             InitializeComponent();
+            ur = new UserRepo();
         }
-
         public void cmdReg_Click(object sender, EventArgs e)
         {
-
-            SqlConnection conn = new SqlConnection();
-            conn.ConnectionString = "Data Source = localhost; Initial Catalog = Annonser; Integrated Security = SSPI;";
-            conn.Open();
-
-            string sql = "insert into [User](Firstname,Lastname,Email,Username,Password) values (@Firstname, @Lastname, @Email, @Username, @Password)";
-            sql += "Select cast(@@identity as int)";
-
-            SqlCommand cmd = new SqlCommand(sql, conn);
-
-            cmd.Parameters.AddWithValue("@Firstname", txtFirstName.Text);
-            cmd.Parameters.AddWithValue("@Lastname", txtLastName.Text);
-            cmd.Parameters.AddWithValue("@Email", txtEmail.Text);
-            cmd.Parameters.AddWithValue("@Username", txtUserName.Text);
-            cmd.Parameters.AddWithValue("@Password", txtPassWord.Text);
-
-            int newID = (int)cmd.ExecuteScalar();
-            UserID = newID;
+            ur.CreateMember(new User(txtFirstName.Text,txtLastName.Text,txtEmail.Text,txtUserName.Text,txtPassWord.Text));
+            
         }
     }
 }

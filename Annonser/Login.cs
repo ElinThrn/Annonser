@@ -14,19 +14,24 @@ namespace Annonser
 {
     public partial class Login : Form
     {
+        UserRepo ur;
         public Login()
         {
             InitializeComponent();
-
+            ur = new UserRepo();
         }
 
         private void cmdMemberLogin_Click(object sender, EventArgs e)
         {
-
-            USer uSer = UserRepo.LogIn(txtUsername.Text, txtPassword.Text);
-            USer user = new USer();
-            frmUserDetails userdeta = new frmUserDetails(user);
-            userdeta.Show();
+            int UserID = ur.Login(txtUsername.Text, txtPassword.Text);
+            if (UserID > 0)
+            {
+                Ad ad = new Ad();
+                ad.Show();
+                ad.Ad_Show();
+                ad.SetUser(UserID);
+                this.Close();
+            }
 
         }
 
@@ -34,9 +39,6 @@ namespace Annonser
         {
             CreateMember createmember = new CreateMember();
             createmember.Show();
-            
-            
-
         }
     }
 }

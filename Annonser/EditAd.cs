@@ -18,28 +18,7 @@ namespace Annonser
             InitializeComponent();
         }
 
-        private void EditAd_Load(object sender, EventArgs e)
-        {
-            using (AnnonserEntities1 db = new AnnonserEntities1())
-            {
-                List<Category> category = db.Categories.ToList();
 
-                ComboBoxItem item = new ComboBoxItem();
-                item.Value = 0;
-                item.Text = "Alla kategorier";
-
-                cboCategory.Items.Add(item);
-
-                foreach (Category cat in category)
-                {
-                    ComboBoxItem listItem = new ComboBoxItem();
-                    listItem.Value = cat.CategoryID;
-                    listItem.Text = cat.Categoryname;
-
-                    cboCategory.Items.Add(listItem);
-                }
-            }
-        }
 
         private void cmdSaveAd_Click(object sender, EventArgs e)
         {

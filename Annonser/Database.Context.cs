@@ -12,6 +12,8 @@ namespace Annonser
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class AnnonserEntities1 : DbContext
     {
@@ -27,7 +29,11 @@ namespace Annonser
     
         public virtual DbSet<Advert> Adverts { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<USer> USers { get; set; }
+    
+        public virtual ObjectResult<GetUserName_Result> GetUserName(string firstname)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetUserName_Result>("GetUserName");
+        }
     }
 }
